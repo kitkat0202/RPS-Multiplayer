@@ -152,10 +152,11 @@ $(function() {
             } else {
                 player.message = $("#message-input").val().trim()
                 $(".msg").append($("<div>").addClass("mymsg").html(`<p><span class="msg-name">${player.name}:</span> ${player.message}</p>`))
+                $(".msg").scrollTop($(".msg").prop('scrollHeight'))
                 gameRef.child(thisGameRoom).child(player.id).child("message").set(player.message)
-                $("#message-input").val("")
             }
         }
+        $("#message-input").val("")
     })
 
 
@@ -199,6 +200,7 @@ $(function() {
         if (opponentMsg.exists()) {
             var thisMsg = opponentMsg.val()
             $(".msg").append($("<div>").addClass("othermsg").html(`<p><span class="msg-name">${opponent.name}:</span> ${thisMsg}`))
+            $(".msg").scrollTop($(".msg").prop('scrollHeight'))
             gameRef.child(thisGameRoom).child(opponent.id).child("message").remove()
         }
 
@@ -214,6 +216,7 @@ $(function() {
         })
         msgOn = false
         $(".msg").empty()
+        $(".msg").append($("<div>").addClass("logoff").html(`<p>${opponent.name} has logged off</p>`))
         $(".player-right h2").text("Waiting for opponent...")
         gameRef.child(thisGameRoom).remove()
     })
@@ -243,6 +246,7 @@ $(function() {
             player.win = 0
             player.lose = 0
             $(".player-right h2").text(`Opponent: ${opponent.name}`)
+            $(".msg").append($("<div>").addClass("logoff").html(`<p>${opponent.name} has joined the game</p>`))
             $("#left-img").removeClass("disappear")
         }
 
