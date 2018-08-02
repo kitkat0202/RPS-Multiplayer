@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Rock Papar Scissors</title>
+    <link rel="stylesheet" href="assets/css/reset.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah|Indie+Flower" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <!-- Game Center -->
+    <div class="container-fluid disappear">
+        <h1 class="title">Rock Paper Scissors</h1>
+        <!-- <p class="view-count">Viewer Count: <span class="view-number">0</span></p> -->
+        <div class="game-section row">
+            
+            <div class="player-left col-md-12 col-lg-7">
+                <h2>Hello</h2>
+                <div class="player-left-score row">
+                    <h3 class= "col-6">Win: <span  class="left-win-score">0</span></h3>
+                    <h3 class= "col-6">Lose: <span  class="left-lose-score">0</span></h3>
+                </div>
+                <div id="left-img" class=" row">
+                    <div class="col-4">
+                        <img class="img-fluid" src="assets/images/scissors.png" alt="sissors" data-choice="scissors" id="scissors">
+                    </div>
+                    <div class="col-4">
+                        <img class="img-fluid" src="assets/images/rock.png" alt="rock" data-choice="rock" id="rock">
+                    </div>
+                    <div class="col-4">
+                        <img class="img-fluid" src="assets/images/paper.png" alt="paper" data-choice="paper" id="paper">
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-12 col-lg-5 right-side">
+                <div class="player-right">
+                    <h2>Waiting for opponent...</h2>
+                    <div class="player-right-score">
+                    </div>
+                    <div id="right-img"></div>
+                </div>
+
+                <!-- message fields -->
+                <div class="message-box">
+                    <div class="msg scrollbar"></div>
+                    <div class="input">
+                        <form autocomplete="off">
+                            <input type="text" id="message-input" autocomplete="off" placeholder="Type Message Here">
+                            <button type="submit" id="submit-msg">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            
+        </div>
+
+
+    </div>
+
+    <!-- Name Request -->
+    <div class="name-request">
+        <form autocomplete="off">
+            <label for="name-input">What is Your Name?</label>
+            <input type="text" id="name-input" autocomplete="off" placeholder="Please enter name here">
+            <button type="submit" id="submit-name">Submit</button>
+        </form>
+    </div>
+
+    <!-- win/ lose message -->
+    <div class="win-lose disappear">
+        <h1></h1>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/5.3.0/firebase.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
+    <script src="assets/javascript/script2.js"></script>
+</body>
+</html>
