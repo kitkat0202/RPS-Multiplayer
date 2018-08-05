@@ -43,14 +43,6 @@ body, html {
     box-shadow: 0px 30px 50px #fff;
 }
 
-/* .view-count {
-    position: absolute;
-    left: 15px;
-    bottom: 10px;
-    font-size: 25px;
-    text-shadow: var(--tshadow);
-} */
-
 .game-section {
     height: 80%;
     padding: 80px;
@@ -65,14 +57,14 @@ body, html {
 
 .player-left {
     padding: 20px;
-    border: 5px solid var(--win);
+    border: 5px double var(--win);
 }
 
 .player-right {
     padding: 10px 0;
     height: 50%;
     width: 100%;
-    border: 5px solid var(--lose);
+    border: 5px double var(--lose);
     margin-right: 50px;
 }
 
@@ -127,6 +119,11 @@ body, html {
     height: 100%;
 }
 
+.win-lose {
+    font-weight: bold;
+    
+}
+
 .message-box {
     background-color: white;
     width: 100%;
@@ -155,8 +152,7 @@ body, html {
     font-weight: bold;
 }
 
-.name-request,
-.win-lose {
+.name-request {
     position: absolute;
     width: 50%;
     height: 200px;
@@ -165,34 +161,6 @@ body, html {
     margin-top: -100px;
     margin-left: -25%;
     border-radius: var(--radius);
-}
-
-.win-lose {
-    opacity: .7;
-}
-
-.win-lose h1 {
-    text-align: center;
-    font-size: 80px;
-    line-height: 180px;
-    letter-spacing: 8px;
-    font-weight: bold;
-    color: #fff;
-}
-
-.winner {
-    background-color: var(--win);
-    box-shadow: 0 0 40px 20px var(--win);
-}
-
-.loser {
-    background-color: var(--lose);
-    box-shadow: 0 0 40px 20px var(--lose);
-}
-
-.tie {
-    background-color: var(--tie);
-    box-shadow: 0 0 40px 20px var(--tie);
 }
 
 .name-request {

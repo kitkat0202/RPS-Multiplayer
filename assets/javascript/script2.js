@@ -17,94 +17,66 @@ $(function() {
 
     var player = {} // id, name, move
     var opponent = {}
-    var gameRoom
+    var gameRoom = 0
     var thisGameRoom = 0
-    var chooseOn = true
+    var chooseOn = false
     var msgOn = false
 
+    // restart
+    let restart = () => {
+        // clear database move
+        gameRef.child(thisGameRoom).child(opponent.id).child("move").remove()
+        
+        setTimeout(() => {
+            // reset moves
+            player.move = ""
+            opponent.move = ""
+            // remove color filter from choices
+            var arrayFilterCheck = ["rock", "paper", "scissors"]
+            arrayFilterCheck.forEach(function(element) {
+                if ($(`#left-img .col-4 > #${element}`).hasClass("grayscale")) {
+                    $(`#left-img .col-4 > #${element}`).removeClass("grayscale")
+                }
+            })
+
+            $(".player-right h2").removeClass("win-lose").text(`Opponent: ${opponent.name}`)
+            $("#right-img").empty()
+        }, 2000);
+        setTimeout(() => {
+            chooseOn = true
+        }, 2005);
+    }
 
     // function at tie
     let tie = () => {
-        console.log("tie")
-        $(".win-lose h1").text("Tie Game")
-        $(".win-lose").addClass("tie")
-        $(".win-lose").removeClass("disappear")
+        $(".player-right h2").text(`No Winners Here...`).addClass("win-lose")
     }
 
     // function at win
     let win = () => {
-        console.log("wins")
         player.win = player.win + 1
-        opponent.lose = opponent.lose + 1
         $(".left-win-score").text(player.win)
-
-        $(".win-lose h1").text("Winner!!")
-        $(".win-lose").addClass("winner")
-        $(".win-lose").removeClass("disappear")
+        $(".player-right h2").text(`You WON!`).addClass("win-lose")
     }
 
     // function at lose
     let lose = () => {
-        console.log("lose")
         player.lose = player.lose + 1
-        opponent.win = opponent.win + 1
         $(".left-lose-score").text(player.lose)
-
-        $(".win-lose h1").text("You Lose...")
-        $(".win-lose").addClass("loser")
-        $(".win-lose").removeClass("disappear")
+        $(".player-right h2").text(`You lose...`).addClass("win-lose")
     }
-
-    // restart
-    let restart = () => {
-        // remove color from popup
-        var arrayWinLoseColorCheck = ["winner", "loser", "tie"]
-        arrayWinLoseColorCheck.forEach(function(element) {
-            if ($(".win-lose").hasClass(element)) {
-                $(".win-lose").removeClass(element)
-            }
-        })
-
-        // remove color filter from choices
-        var arrayFilterCheck = ["rock", "paper", "scissors"]
-        arrayFilterCheck.forEach(function(element) {
-            if ($(`#left-img .col-4 > #${element}`).hasClass("grayscale")) {
-                $(`#left-img .col-4 > #${element}`).removeClass("grayscale")
-            }
-        })
-
-        // reset moves
-        player.move = ""
-        opponent.move = ""
-        gameRef.child(thisGameRoom).child(player.id).child("move").remove()
-
-        $(".win-lose").addClass("disappear")
-        $("#right-img").empty()
-        chooseOn = true
-    }
-
 
     // Check win lose
     let checkWin = (choice1, choice2) => {
         if (choice1 === choice2) {
-            tie()
-            setTimeout(() => {
-                $(".win-lose").removeClass("tie")
-                restart()
-            }, 3000);
+            tie() 
         } else if ((choice1 === "rock" && choice2 === "scissors") || (choice1 === "scissors" && choice2 === "paper") || (choice1 === "paper" && choice2 === "rock")) {
             win()
-            setTimeout(() => {
-                $(".win-lose").removeClass("winner")
-                restart()
-            }, 3000);
         } else if ((choice1 === "scissors" && choice2 === "rock") || (choice1 === "paper" && choice2 === "scissors") || (choice1 === "rock" && choice2 === "paper")) {
             lose()
-            setTimeout(() => {
-                $(".win-lose").removeClass("loser")
-                restart()
-            }, 3000);
         }
+        console.log(player.win);
+        restart()
     }
 
     // Creating players
@@ -171,19 +143,13 @@ $(function() {
 
 
     // add viewcounter HTML
-    // connectionsRef.on("value", function(snap) {
-    //     $(".view-number").text(snap.numChildren())
-    // })
+    connectionsRef.on("value", function(snap) {
+        // keeps track of game rooms
+        gameRoom = snap.numChildren()
+    })
 
 
     gameRef.on("value", function(snap) {
-        // keeps track of number of game rooms
-        if (snap.child("0").exists()) {
-            gameRoom = snap.numChildren()
-        } else {
-            gameRoom = 0
-        }
-
         // record opponent move
         var opponentMoved = snap.child(thisGameRoom).child(opponent.id).child("move")
         if (opponentMoved.exists() && player.move) {
@@ -215,8 +181,10 @@ $(function() {
             player: player.name
         })
         msgOn = false
+        chooseOn = false
         $(".msg").empty()
         $(".msg").append($("<div>").addClass("logoff").html(`<p>${opponent.name} has logged off</p>`))
+        $("#left-img").addClass("disappear")
         $(".player-right h2").text("Waiting for opponent...")
         gameRef.child(thisGameRoom).remove()
     })
@@ -225,8 +193,9 @@ $(function() {
     waitRef.on("value", function(snap) {
         if(snap.numChildren() === 2) {
             // if there are 2 playres in waiting will move to a game room
-            gameRoom = thisGameRoom
+            thisGameRoom = gameRoom
             msgOn = true
+            chooseOn = true
             var thisSnap = snap.val() 
             gameRef.child(thisGameRoom).set(thisSnap)
             waitRef.child(player.id).remove()
