@@ -75,7 +75,6 @@ $(function() {
         } else if ((choice1 === "scissors" && choice2 === "rock") || (choice1 === "paper" && choice2 === "scissors") || (choice1 === "rock" && choice2 === "paper")) {
             lose()
         }
-        console.log(player.win);
         restart()
     }
 
@@ -143,37 +142,16 @@ $(function() {
 
 
     // add viewcounter HTML
-    connectionsRef.on("value", function(snap) {
+    connectionsRef.once("value", function(snap) {
         // keeps track of game rooms
-        gameRoom = snap.numChildren()
-    })
-
-
-    gameRef.on("value", function(snap) {
-        // record opponent move
-        var opponentMoved = snap.child(thisGameRoom).child(opponent.id).child("move")
-        if (opponentMoved.exists() && player.move) {
-            opponent.move = opponentMoved.val()
-
-            $(".player-right h2").text(`Opponent: ${opponent.name}`)
-            $("#right-img").html($(`<img class="img-fluid" src="assets/images/${opponent.move}.png">`))
-
-            checkWin(player.move, opponent.move)
+        if (snap.numChildren()%2 === 0) {
+            gameRoom = snap.numChildren()/2
+        } else if (snap.numChildren() === 1) {
+            gameRoom = 1
+        } else {
+            gameRoom = (snap.numChildren() + 1)/2
         }
-
-        // record opponents message
-        var opponentMsg = snap.child(thisGameRoom).child(opponent.id).child("message")
-        if (opponentMsg.exists()) {
-            var thisMsg = opponentMsg.val()
-            $(".msg").append($("<div>").addClass("othermsg").html(`<p><span class="msg-name">${opponent.name}:</span> ${thisMsg}`))
-            $(".msg").scrollTop($(".msg").prop('scrollHeight'))
-            gameRef.child(thisGameRoom).child(opponent.id).child("message").remove()
-        }
-
-        // disconnects
-        gameRef.child(gameRoom).child(player.id).onDisconnect().remove()
     })
-
 
     // when player leaves from game room
     gameRef.child(thisGameRoom).on("child_removed", function(snap) {
@@ -189,11 +167,19 @@ $(function() {
         gameRef.child(thisGameRoom).remove()
     })
 
+    // when all players leave
+    gameRef.on("value", function(snap) {
+
+    })
+
 
     waitRef.on("value", function(snap) {
-        if(snap.numChildren() === 2) {
+        if (thisGameRoom ==! 0) {
+            return
+        } else if (snap.numChildren() === 2) {
             // if there are 2 playres in waiting will move to a game room
             thisGameRoom = gameRoom
+            
             msgOn = true
             chooseOn = true
             var thisSnap = snap.val() 
@@ -221,6 +207,37 @@ $(function() {
 
         // disconnects
         waitRef.child(player.id).onDisconnect().remove()
+    })
+
+    gameRef.on("child_added", function(snap) {
+        console.log(snap.val());
+        
+    })
+
+    gameRef.on("value", function(snap) {
+        // disconnects
+        gameRef.child(gameRoom).child(player.id).onDisconnect().remove()
+        
+        // record opponent move
+        var opponentMoved = snap.child(thisGameRoom).child(opponent.id).child("move")
+        if (opponentMoved.exists() && player.move) {
+            opponent.move = opponentMoved.val()
+
+            $(".player-right h2").text(`Opponent: ${opponent.name}`)
+            $("#right-img").html($(`<img class="img-fluid" src="assets/images/${opponent.move}.png">`))
+
+            checkWin(player.move, opponent.move)
+        }
+
+        // record opponents message
+        var opponentMsg = snap.child(thisGameRoom).child(opponent.id).child("message")
+        if (opponentMsg.exists()) {
+            var thisMsg = opponentMsg.val()
+            
+            $(".msg").append($("<div>").addClass("othermsg").html(`<p><span class="msg-name">${opponent.name}:</span> ${thisMsg}`))
+            $(".msg").scrollTop($(".msg").prop('scrollHeight'))
+            gameRef.child(thisGameRoom).child(opponent.id).child("message").remove()
+        }
     })
 })
 
