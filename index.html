@@ -12,41 +12,49 @@
 </head>
 <body>
     <!-- Game Center -->
-    <div class="container-fluid disappear">
-        <h1 class="title">Rock Paper Scissors</h1>
-        <!-- <p class="view-count">Viewer Count: <span class="view-number">0</span></p> -->
-        <div class="game-section row">
-            
-            <div class="player-left col-md-12 col-lg-7">
-                <h2>Hello</h2>
-                <div class="player-left-score row">
-                    <h3 class= "col-6">Win: <span  class="left-win-score">0</span></h3>
-                    <h3 class= "col-6">Lose: <span  class="left-lose-score">0</span></h3>
+    <div class="container-fluid">
+        <div class="top">
+            <h1 class="title">Rock Paper Scissors</h1>
+            <div class="player-score disappear">
+                <h3><span class="left-win-score">0</span> : <span  class="left-lose-score">0</span></h3>
+            </div>
+        </div>
+        <p class="view-count">Viewer Count: <span class="view-number">0</span></p>
+        <div class="game-section row disappear">
+
+            <!-- Left side -->
+            <div class="player-left col-6">
+                <h2>Hello Player</h2>
+                <div id="left-img">
+                    <img class="img-fluid img-pic" src="assets/images/scissors.png" alt="sissors" data-choice="scissors" id="scissors">
+                    <img class="img-fluid img-pic" src="assets/images/rock.png" alt="rock" data-choice="rock" id="rock">
+                    <img class="img-fluid img-pic" src="assets/images/paper.png" alt="paper" data-choice="paper" id="paper">
                 </div>
-                <div id="left-img" class="row disappear">
-                    <div class="col-4">
-                        <img class="img-fluid" src="assets/images/scissors.png" alt="sissors" data-choice="scissors" id="scissors">
-                    </div>
-                    <div class="col-4">
-                        <img class="img-fluid" src="assets/images/rock.png" alt="rock" data-choice="rock" id="rock">
-                    </div>
-                    <div class="col-4">
-                        <img class="img-fluid" src="assets/images/paper.png" alt="paper" data-choice="paper" id="paper">
-                    </div>
-                </div>
+                <div id="left-img-choice"></div>
             </div>
 
-            <div class="col-md-12 col-lg-5 right-side">
-                <div class="player-right">
-                    <h2>Waiting for opponent...</h2>
-                    <div class="player-right-score">
-                    </div>
-                    <div id="right-img"></div>
+            <!-- Center -->
+            <div class="center-field">
+                <div class="player-right-score"></div>
+            </div>
+
+
+            <!-- Right side -->
+            <div class="player-right col-6">
+                <h2>Waiting for opponent...</h2>
+                <div id="static-img">
+                    <img class="img-fluid" src="assets/images/scissors.png" alt="sissors">
+                    <img class="img-fluid" src="assets/images/rock.png" alt="rock">
+                    <img class="img-fluid" src="assets/images/paper.png" alt="paper">
                 </div>
 
-                <!-- message fields -->
-                <div class="message-box">
-                    <div class="msg scrollbar"></div>
+                <div id="right-img-choice"></div>
+            </div>
+
+            <!-- message fields -->
+            <div class="message-box">
+                <div class="msg scrollbar">
+                    <div class="mymsg"></div>
                     <div class="input">
                         <form autocomplete="off">
                             <input type="text" id="message-input" autocomplete="off" placeholder="Type Message Here">
@@ -56,17 +64,16 @@
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Name Request -->
-    <div class="name-request">
-        <form autocomplete="off">
-            <label for="name-input">What is Your Name?</label>
-            <input type="text" id="name-input" autocomplete="off" placeholder="Please enter name here">
-            <button type="submit" id="submit-name">Submit</button>
-        </form>
+        <!-- Name Request -->
+        <div class="name-request">
+            <p id="name-input-lable">Please Enter Your Name:</p>
+            <form autocomplete="off">
+                <input type="text" id="name-input" autocomplete="off" placeholder="Name">
+                <button type="submit" id="submit-name">Submit</button>
+            </form>
+        </div>
     </div>
-
     <script src="https://www.gstatic.com/firebasejs/5.3.0/firebase.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>

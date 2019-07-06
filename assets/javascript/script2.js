@@ -34,13 +34,14 @@ $(function() {
             // remove color filter from choices
             var arrayFilterCheck = ["rock", "paper", "scissors"]
             arrayFilterCheck.forEach(function(element) {
-                if ($(`#left-img .col-4 > #${element}`).hasClass("grayscale")) {
-                    $(`#left-img .col-4 > #${element}`).removeClass("grayscale")
+                if ($(`#${element}`).hasClass("grayscale")) {
+                    $(`#${element}`).removeClass("grayscale")
                 }
             })
 
             $(".player-right h2").removeClass("win-lose").text(`Opponent: ${opponent.name}`)
-            $("#right-img").empty()
+            $("#right-img-choice").empty()
+            $("#left-img-choice").empty()
         }, 2000);
         setTimeout(() => {
             chooseOn = true
@@ -87,7 +88,8 @@ $(function() {
             var thisName = $("#name-input").val().trim()
             player.name = thisName.replace(/(\b[a-z](?!\s))/g, function(x){return x.toUpperCase()})
             $(".name-request").addClass("disappear")
-            $(".container-fluid").removeClass("disappear")
+            $(".game-section").removeClass("disappear")
+            $(".player-score").removeClass("disappear")
             $(".player-left h2").text(`Player: ${player.name}`)
 
             waitRef.child(player.id).set({
@@ -97,11 +99,12 @@ $(function() {
     })
 
     // saving player choice
-    $("#left-img .col-4 img").on("click", function() {
+    $("#left-img .img-pic").on("click", function() {
         if (chooseOn) {
             player.move = $(this).attr("data-choice")
-            $(" img").addClass("grayscale")
+            $("#left-img .img-pic").addClass("grayscale")
             $(this).removeClass("grayscale")
+            $("#left-img-choice").html($(`<img class="img-fluid" src="assets/images/${player.move}.png">`))
             
             gameRef.child(thisGameRoom).child(player.id).child("move").set(player.move)
             
@@ -122,7 +125,7 @@ $(function() {
                 return
             } else {
                 player.message = $("#message-input").val().trim()
-                $(".msg").append($("<div>").addClass("mymsg").html(`<p><span class="msg-name">${player.name}:</span> ${player.message}</p>`))
+                $(".msg").append($("<div>").addClass("mymsg").html(`<p><span class="msg-name">${player.name}:</span> <span class="msg-msg">${player.message}</span></p>`))
                 $(".msg").scrollTop($(".msg").prop('scrollHeight'))
                 gameRef.child(thisGameRoom).child(player.id).child("message").set(player.message)
             }
@@ -224,7 +227,7 @@ $(function() {
             opponent.move = opponentMoved.val()
 
             $(".player-right h2").text(`Opponent: ${opponent.name}`)
-            $("#right-img").html($(`<img class="img-fluid" src="assets/images/${opponent.move}.png">`))
+            $("#right-img-choice").html($(`<img class="img-fluid" src="assets/images/${opponent.move}.png">`))
 
             checkWin(player.move, opponent.move)
         }
@@ -234,7 +237,7 @@ $(function() {
         if (opponentMsg.exists()) {
             var thisMsg = opponentMsg.val()
             
-            $(".msg").append($("<div>").addClass("othermsg").html(`<p><span class="msg-name">${opponent.name}:</span> ${thisMsg}`))
+            $(".msg").append($("<div>").addClass("othermsg").html(`<p><span class="msg-other-name">${opponent.name}:</span> <span class="msg-other-msg">${thisMsg}</span></p>`))
             $(".msg").scrollTop($(".msg").prop('scrollHeight'))
             gameRef.child(thisGameRoom).child(opponent.id).child("message").remove()
         }
